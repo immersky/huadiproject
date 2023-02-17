@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.immersky.universityAnalysis.dao.GradeMapper">
+    <resultMap id="gradeMap" type="grade">
+        <result property="grade_universityName" column="grade_universityName"/>
+        <result property="grade_year" column="grade_year"/>
+        <result property="grade_rank" column="grade_rank"/>
+
+    </resultMap>
+
+
+    <select id="select_s" resultMap="gradeMap">
+        SELECT grade_universityName,grade_year,grade_rank FROM srank
+        <if test="grade != null">
+            <where>
+                <if test="grade.grade_universityName != null">
+                    (grade_universityName LIKE concat('%',#{grade.grade_universityName},'%'))
+                </if>
+            </where>
+        </if>
+        <if test="orderUtil != null">
+            ORDER BY ${orderUtil.orderBy}<if test="orderUtil.isDesc">desc </if>
+        </if>
+        <if test="pageUtil != null">
+            LIMIT #{pageUtil.pageStart},#{pageUtil.count}
+        </if>
+    </select>
+
+    <select id="selectTotal_s" resultType="int" parameterType="string">
+        SELECT COUNT(grade_universityName ) FROM srank
+        <if test="grade != null">
+            <where>
+                <if test="grade.grade_universityName != null">
+                    (grade_universityName LIKE concat('%',#{grade.grade_universityName},'%'))
+                </if>
+
+            </where>
+        </if>
+    </select>
+
+
+    <select id="select_r" resultMap="gradeMap">
+        SELECT grade_universityName,grade_year,grade_rank FROM rrank
+        <if test="grade != null">
+            <where>
+                <if test="grade.grade_universityName != null">
+                    (grade_universityName LIKE concat('%',#{grade.grade_universityName},'%'))
+                </if>
+            </where>
+        </if>
+        <if test="orderUtil != null">
+            ORDER BY ${orderUtil.orderBy}<if test="orderUtil.isDesc">desc </if>
+        </if>
+        <if test="pageUtil != null">
+            LIMIT #{pageUtil.pageStart},#{pageUtil.count}
+        </if>
+    </select>
+
+    <select id="selectTotal_r" resultType="int" parameterType="string">
+        SELECT COUNT(grade_universityName ) FROM rrank
+        <if test="grade != null">
+            <where>
+                <if test="grade.grade_universityName != null">
+                    (grade_universityName LIKE concat('%',#{grade.grade_universityName},'%'))
+                </if>
+
+            </where>
+        </if>
+    </select>
+</mapper>

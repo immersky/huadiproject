@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.immersky.universityAnalysis.dao.UniversityMapper">
+    <resultMap id="universityMap" type="university">
+        <id property="university_id" column="university_id"/>
+        <result property="university_province" column="university_province"/>
+        <result property="university_name" column="university_name"/>
+        <result property="university_type" column="university_type"/>
+        <result property="university_location" column="university_location"/>
+        <result property="university_ranks" column="university_ranks"/>
+        <result property="university_popularity" column="university_popularity"/>
+        <result property="university_majors" column="university_majors"/>
+        <result property="university_desc" column="university_desc"/>
+    </resultMap>
+
+
+    <select id="select" resultMap="universityMap">
+        SELECT university_id,university_province,university_name,university_type,university_location,university_ranks,university_popularity,university_majors,university_desc FROM university
+        <if test="university != null">
+            <where>
+                <if test="university.university_name != null">
+                    (university_name LIKE concat('%',#{university.university_name},'%'))
+                </if>
+            </where>
+        </if>
+        <if test="orderUtil != null">
+            ORDER BY ${orderUtil.orderBy}<if test="orderUtil.isDesc">desc </if>
+        </if>
+        <if test="pageUtil != null">
+            LIMIT #{pageUtil.pageStart},#{pageUtil.count}
+        </if>
+    </select>
+    <select id="selectOne" resultMap="universityMap" parameterType="int">
+        SELECT university_id,university_province,university_name,university_type,university_location,university_ranks,university_popularity,university_majors,university_desc  FROM university
+        <where>
+            university_id = #{university_id}
+        </where>
+    </select>
+
+    <select id="selectTotal" resultType="int" parameterType="string">
+        SELECT COUNT(university_id) FROM university
+        <if test="university != null">
+            <where>
+                <if test="university.university_name != null">
+                    (university_name LIKE concat('%',#{university.university_name},'%'))
+                </if>
+
+            </where>
+        </if>
+    </select>
+</mapper>
